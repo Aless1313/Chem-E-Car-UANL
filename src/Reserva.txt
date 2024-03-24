@@ -1,0 +1,287 @@
+#include <Wire.h>
+#include <Adafruit_SSD1306.h>
+#include <Adafruit_TCS34725.h>
+
+#define OLED_RESET 4
+Adafruit_SSD1306 display(OLED_RESET);
+
+#define motor 33
+#define stop 27
+#define buttonstart 13
+
+bool motorDetenido = false; // Variable para mantener el estado del motor
+
+Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_4X);
+
+void setup()
+{
+  Serial.begin(9600);
+
+  if (!tcs.begin())
+
+  
+  {
+    Serial.println("No se pudo encontrar el sensor TCS34725. Verifique la conexión!");
+    while (1)
+      ;
+  }
+  Serial.println("Encontrado sensor TCS34725");
+
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
+  {
+    Serial.println(F("No se pudo iniciar la pantalla OLED SSD1306"));
+    for (;;)
+      ;
+  }
+
+  display.display(); // Iniciar con la pantalla en blanco
+  delay(2000);       // Espera 2 segundos antes de comenzar el programa
+  display.clearDisplay();
+
+  pinMode(stop, OUTPUT);
+
+  pinMode(motor, OUTPUT);
+}
+
+void loop()
+{
+  // digitalWrite(motor, HIGH);
+
+  if (digitalRead(stop) == HIGH)
+  {
+    // Si se presiona el botón, detener el motor
+    digitalWrite(motor, LOW);
+    motorDetenido = true;
+    display.setTextSize(1);
+    display.setTextColor(WHITE);
+    display.setCursor(0, 0);
+    display.print("STOP");
+    display.display();
+  }
+
+  if (motorDetenido)
+  {
+    digitalWrite(motor, LOW);
+  }
+
+  uint16_t clear, red, green, blue;
+
+  tcs.getRawData(&red, &green, &blue, &clear);
+
+  Serial.print("Rojo: ");
+  Serial.print(red);
+  Serial.print(" Verde: ");
+  Serial.print(green);
+  Serial.print(" Azul: ");
+  Serial.print(blue);
+  Serial.println();
+
+  if (red > 400 && green > 400 && blue > 400)
+  {
+
+    digitalWrite(motor, HIGH);
+  }
+  else if (red < 400 && green < 400 && blue < 400)
+  {
+    digitalWrite(motor, LOW);
+    display.setTextSize(1);
+    display.setTextColor(WHITE);
+    display.setCursor(0, 0);
+    display.print("STOP");
+    display.display();
+  }
+
+  if (digitalRead(stop) == HIGH)
+  {
+    // Si se presiona el botón, detener el motor
+    digitalWrite(motor, LOW);
+    motorDetenido = true;
+    display.setTextSize(1);
+    display.setTextColor(WHITE);
+    display.setCursor(0, 0);
+    display.print("STOP");
+    display.display();
+  }
+
+  if (motorDetenido)
+  {
+    digitalWrite(motor, LOW);
+  }
+
+  display.clearDisplay();
+
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 0);
+  display.print("Rojo: ");
+  display.println(red);
+  display.print("Verde: ");
+  display.println(green);
+  display.print("Azul: ");
+  display.println(blue);
+
+  display.display();
+
+  delay(500); // Esperar medio segundo antes de volver a leer
+
+  if (digitalRead(stop) == HIGH)
+  {
+    // Si se presiona el botón, detener el motor
+    digitalWrite(motor, LOW);
+    motorDetenido = true;
+    display.setTextSize(1);
+    display.setTextColor(WHITE);
+    display.setCursor(0, 0);
+    display.print("STOP");
+    display.display();
+  }
+
+  if (motorDetenido)
+  {
+    digitalWrite(motor, LOW);
+  }
+}
+
+
+
+#include <Wire.h>
+#include <Adafruit_SSD1306.h>
+#include <Adafruit_TCS34725.h>
+
+#define OLED_RESET 4
+Adafruit_SSD1306 display(OLED_RESET);
+
+#define motor 33
+#define stop 27
+#define buttonstart 13
+
+bool motorDetenido = false; // Variable para mantener el estado del motor
+
+Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_4X);
+
+void setup()
+{
+  Serial.begin(9600);
+
+  if (!tcs.begin())
+  {
+    Serial.println("No se pudo encontrar el sensor TCS34725. Verifique la conexión!");
+    while (1)
+      ;
+  }
+  Serial.println("Encontrado sensor TCS34725");
+
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
+  {
+    Serial.println(F("No se pudo iniciar la pantalla OLED SSD1306"));
+    for (;;)
+      ;
+  }
+
+  display.display(); // Iniciar con la pantalla en blanco
+  delay(2000);       // Espera 2 segundos antes de comenzar el programa
+  display.clearDisplay();
+
+  pinMode(stop, OUTPUT);
+
+  pinMode(motor, OUTPUT);
+}
+
+void loop()
+{
+  // digitalWrite(motor, HIGH);
+
+  if (digitalRead(stop) == HIGH)
+  {
+    // Si se presiona el botón, detener el motor
+    digitalWrite(motor, LOW);
+    motorDetenido = true;
+    display.setTextSize(1);
+    display.setTextColor(WHITE);
+    display.setCursor(0, 0);
+    display.print("STOP");
+    display.display();
+  }
+
+  if (motorDetenido)
+  {
+    digitalWrite(motor, LOW);
+  }
+
+  uint16_t clear, red, green, blue;
+
+  tcs.getRawData(&red, &green, &blue, &clear);
+
+  Serial.print("Rojo: ");
+  Serial.print(red);
+  Serial.print(" Verde: ");
+  Serial.print(green);
+  Serial.print(" Azul: ");
+  Serial.print(blue);
+  Serial.println();
+
+  if (red > 400 && green > 400 && blue > 400)
+  {
+
+    digitalWrite(motor, HIGH);
+  }
+  else if (red < 400 && green < 400 && blue < 400)
+  {
+    digitalWrite(motor, LOW);
+    display.setTextSize(1);
+    display.setTextColor(WHITE);
+    display.setCursor(0, 0);
+    display.print("STOP");
+    display.display();
+  }
+
+  if (digitalRead(stop) == HIGH)
+  {
+    // Si se presiona el botón, detener el motor
+    digitalWrite(motor, LOW);
+    motorDetenido = true;
+    display.setTextSize(1);
+    display.setTextColor(WHITE);
+    display.setCursor(0, 0);
+    display.print("STOP");
+    display.display();
+  }
+
+  if (motorDetenido)
+  {
+    digitalWrite(motor, LOW);
+  }
+
+  display.clearDisplay();
+
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 0);
+  display.print("Rojo: ");
+  display.println(red);
+  display.print("Verde: ");
+  display.println(green);
+  display.print("Azul: ");
+  display.println(blue);
+
+  display.display();
+
+  delay(500); // Esperar medio segundo antes de volver a leer
+
+  if (digitalRead(stop) == HIGH)
+  {
+    // Si se presiona el botón, detener el motor
+    digitalWrite(motor, LOW);
+    motorDetenido = true;
+    display.setTextSize(1);
+    display.setTextColor(WHITE);
+    display.setCursor(0, 0);
+    display.print("STOP");
+    display.display();
+  }
+
+  if (motorDetenido)
+  {
+    digitalWrite(motor, LOW);
+  }
+}
